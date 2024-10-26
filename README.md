@@ -29,6 +29,17 @@ That's when I got an idea to make this app. Not only can you generate a countdow
 - FPS (24, 30, 60, 120, 240)
 - Custom Bitrate
 
+# Preview
+
+https://github.com/user-attachments/assets/2b03d0ff-c92e-4949-a4e0-b8f605d68666
+*A 3 second timer*
+
+# Contributing
+Contributions are welcome! If you have suggestions for improvements or new features, please fork the repository and submit a pull request.
+
 # Known Issues
 - The popup glitches when moving the "Font Size" slider
-- 
+
+# Contact
+
+For questions or feedback, feel free to reach out to me at brwlgmr@gmail.com
