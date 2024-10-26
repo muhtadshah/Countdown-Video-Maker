@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:padding="16dp"
+     android:orientation="vertical">
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:text="Select Resolution"
+         android:paddingTop="8dp" />
+
+    <Spinner
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:id="@+id/spinner_resolution">
+
+    </Spinner>
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:text="Select FPS"
+         android:paddingTop="16dp" />
+
+    <Spinner
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:id="@+id/spinner_fps">
+
+    </Spinner>
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:visibility="gone"
+         android:textColor="#FF0000"
+         android:maxLines="3"
+         android:scrollHorizontally="false"
+         android:id="@+id/fps_warning"
+         android:text="Warning: Lower FPS values increase video length."
+         android:paddingTop="8dp" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:text="Select Bitrate"
+         android:paddingTop="16dp" />
+
+    <Spinner
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:id="@+id/spinner_bitrate">
+
+    </Spinner>
+
+    <EditText
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:visibility="gone"
+         android:hint="Enter custom bitrate in Mbps"
+         android:layout_marginTop="8dp"
+         android:inputType="number"
+         android:id="@+id/custom_bitrate_input" />
+
+    <Button
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_marginTop="24dp"
+         android:id="@+id/confirm_button"
+         android:text="Confirm"
+         android:layout_gravity="center_horizontal" />
+
+</LinearLayout>

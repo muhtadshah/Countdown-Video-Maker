@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:padding="16dp"
+     android:id="@+id/scroll_view">
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:orientation="vertical">
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:text="Select Font" />
+        
+
+        <Spinner
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:id="@+id/font_spinner">
+        </Spinner>
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:text="Font Size" />
+
+        <SeekBar
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:max="150"
+             android:id="@+id/font_size_seekbar" />
+
+        <ImageView
+    android:id="@+id/preview_image"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:contentDescription="@string/preview_image_desc"
+    android:background="#000000" />
+
+        <Button
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:id="@+id/btn_color_picker"
+             android:text="Pick Text Color" />
+        <Button
+    android:id="@+id/btn_background_color_picker"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Background Color" />
+
+
+        <CheckBox
+        android:id="@+id/checkbox_shadow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shadow" />
+
+        <Button
+        android:id="@+id/btn_shadow_color_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shadow Color" />
+        
+        <CheckBox
+        android:id="@+id/checkbox_glow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Glow" />
+
+
+        <Button
+        android:id="@+id/btn_glow_color_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Glow Color" />
+
+        
+        <CheckBox
+        android:id="@+id/checkbox_stroke"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stroke" />
+
+        <Button
+        android:id="@+id/btn_stroke_color_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stroke Color" />
+        
+        <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Stroke Width" />
+
+<SeekBar
+    android:id="@+id/stroke_width_seekbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:max="20" />
+        
+        <Button
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:id="@+id/confirm_button"
+             android:text="Confirm" />
+
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:padding="16dp"
+     android:orientation="vertical">
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:textSize="18sp"
+         android:text="Select Font" />
+
+    <Spinner
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginTop="8dp"
+         android:id="@+id/font_spinner">
+
+    </Spinner>
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:textSize="18sp"
+         android:layout_marginTop="16dp"
+         android:text="Font Size" />
+
+    <SeekBar
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:max="150"
+         android:id="@+id/font_size_seekbar" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:gravity="center"
+         android:textSize="24sp"
+         android:layout_marginTop="16dp"
+         android:id="@+id/preview_text"
+         android:text="Preview" />
+
+    <Button
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_marginTop="16dp"
+         android:id="@+id/confirm_button"
+         android:layout_gravity="center"
+         android:text="Confirm" />
+
+</LinearLayout>

@@ -1,0 +1,95 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/CountdownTimerApp/app/src/main/java/com/example/countdowntimerapp/MainActivity.java",
+      "selection": {
+        "end": {
+          "column": 34,
+          "index": 26414,
+          "line": 671
+        },
+        "start": {
+          "column": 34,
+          "index": 26414,
+          "line": 671
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/CountdownTimerApp/app/src/main/res/drawable/rounded_dialog_background.xml",
+      "selection": {
+        "end": {
+          "column": 37,
+          "index": 104,
+          "line": 1
+        },
+        "start": {
+          "column": 37,
+          "index": 104,
+          "line": 1
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/CountdownTimerApp/app/src/main/res/values/styles.xml",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 724,
+          "line": 17
+        },
+        "start": {
+          "column": 0,
+          "index": 724,
+          "line": 17
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/CountdownTimerApp/app/src/main/res/drawable/custom_progress_drawable.xml",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/CountdownTimerApp/app/src/main/res/layout/custom_progress_dialog.xml",
+      "selection": {
+        "end": {
+          "column": 31,
+          "index": 364,
+          "line": 10
+        },
+        "start": {
+          "column": 31,
+          "index": 364,
+          "line": 10
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/CountdownTimerApp/app/src/main/res/drawable/rounded_button.xml",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/CountdownTimerApp/app/src/main/res/layout/custom_progress_dialog.xml"
+}

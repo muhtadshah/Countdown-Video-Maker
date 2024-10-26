@@ -1,0 +1,18 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        // jcenter() // Uncomment if needed for older dependencies
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        // jcenter() // Uncomment if needed for older dependencies
+    }
+}
+
+rootProject.name = "CountdownTimerApp"
+include ':app'

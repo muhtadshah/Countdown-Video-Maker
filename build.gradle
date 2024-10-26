@@ -1,0 +1,28 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        google() // Required for Android dependencies
+        mavenCentral() // Required for MobileFFmpeg and other libraries
+        // jcenter() // Uncomment if you need it for older dependencies
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.0.0' // Ensure you're using the correct gradle plugin version
+    }
+}
+
+plugins {
+    id 'com.android.application' version '8.0.0' apply false
+    id 'com.android.library' version '8.0.0' apply false
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+allprojects {
+    repositories {
+        google() // Required for Android dependencies
+        mavenCentral() // Required for MobileFFmpeg and other libraries
+        // jcenter() // Uncomment if you need it for older dependencies
+    }
+}

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:background="@android:color/background_dark"
+     android:gravity="center"
+     android:padding="16dp"
+     android:orientation="vertical">
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_marginBottom="24dp"
+         android:textSize="24sp"
+         android:textColor="@android:color/white"
+         android:id="@+id/app_title"
+         android:text="Countdown Timer App"
+         android:textStyle="bold"
+         android:layout_gravity="center" />
+
+    <EditText
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="16dp"
+         android:background="@drawable/rounded_edit_text"
+         android:hint="Enter seconds"
+         android:padding="12dp"
+         android:textSize="18sp"
+         android:backgroundTint="@android:color/holo_blue_light"
+         android:textColor="@android:color/white"
+         android:id="@+id/input_seconds" />
+
+    <Button
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="16dp"
+         android:background="@drawable/rounded_button"
+         android:padding="12dp"
+         android:textSize="18sp"
+         android:backgroundTint="@android:color/holo_blue_dark"
+         android:textColor="@android:color/white"
+         android:id="@+id/btn_download"
+         android:text="Download Video" />
+
+    <Button
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="16dp"
+         android:background="@drawable/rounded_button"
+         android:padding="12dp"
+         android:textSize="18sp"
+         android:backgroundTint="@android:color/holo_blue_light"
+         android:textColor="@android:color/white"
+         android:id="@+id/btn_text_properties"
+         android:text="Text Properties" />
+
+    <Button
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:layout_marginBottom="16dp"
+         android:background="@drawable/rounded_button"
+         android:padding="12dp"
+         android:textSize="18sp"
+         android:backgroundTint="@android:color/holo_blue_light"
+         android:textColor="@android:color/white"
+         android:id="@+id/btn_video_quality"
+         android:text="Video Quality" />
+    
+   <TextView
+    android:id="@+id/estimated_size_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Estimated Size: -- MB"
+    android:layout_marginTop="16dp" />
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:gravity="center"
+         android:textSize="14sp"
+         android:textColor="@android:color/white"
+         android:layout_marginTop="16dp"
+         android:id="@+id/status_text" />
+
+</LinearLayout>
