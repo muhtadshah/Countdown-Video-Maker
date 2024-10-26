@@ -1,0 +1,20 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Countdown-Video-Maker/app/src/main/java/com/example/countdowntimerapp/MainActivity.java",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 34453,
+          "line": 867
+        },
+        "start": {
+          "column": 0,
+          "index": 34453,
+          "line": 867
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Countdown-Video-Maker/app/src/main/java/com/example/countdowntimerapp/MainActivity.java"
+}

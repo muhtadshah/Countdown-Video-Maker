@@ -706,19 +706,27 @@ private void generateCountdownVideo(int seconds, boolean isShadowEnabled, int sh
         File tempDir = new File(getCacheDir(), "temp_frames");
         if (!tempDir.exists()) tempDir.mkdirs();
 
-        int intervalMs = 1000 / selectedFPS;
         int frameCount = seconds * selectedFPS;
 
         for (int i = 0; i <= frameCount; i++) {
+            // Calculate current time for counting up from 0
             double currentTime = (double) i / selectedFPS;
-            double elapsedTime = currentTime;  // Changed to count up from 0
-            String countdownText = String.format("%.2f", elapsedTime);
 
+            if (currentTime > seconds) {
+                currentTime = seconds; // Ensures the timer stops at the specified input value
+            }
+
+            // Format the current countdown time to display as "seconds.milliseconds"
+            String countdownText = String.format(Locale.getDefault(), "%.2f", currentTime);
+
+            // Create the bitmap image for the current frame
             String imagePath = createBitmapImage(countdownText, i, tempDir, isShadowEnabled, shadowColor, isGlowEnabled, glowColor, isStrokeEnabled, strokeColor, strokeWidth);
             if (imagePath == null) {
                 Log.e("MainActivity", "Failed to create image at index " + i);
+                break;
             }
 
+            // Update the progress
             final int progress = (int) (((double) i / frameCount) * 100);
             runOnUiThread(() -> {
                 if (progressDialog != null) {
@@ -739,7 +747,7 @@ private void generateCountdownVideo(int seconds, boolean isShadowEnabled, int sh
             });
         }
 
-        // Update FFmpeg command
+        // Update FFmpeg command to generate the video from the frames
         String ffmpegCommand = String.format(
             "-framerate %d -i \"%s/frame%%04d.png\" -s %dx%d -c:v libx264 -pix_fmt yuv420p -y \"%s\"",
             selectedFPS,
@@ -772,6 +780,7 @@ private void generateCountdownVideo(int seconds, boolean isShadowEnabled, int sh
         });
     }).start();
 }
+
 
 
 
@@ -826,17 +835,26 @@ private void showVideoPreviewDialog(Uri videoUri) {
         });
     });
 
-    // Toggle play/pause on video click
+    // Toggle play/pause on video click and restart from the beginning when completed
     videoView.setOnClickListener(v -> {
         if (videoView.isPlaying()) {
             videoView.pause();
         } else {
+            if (videoView.getCurrentPosition() >= videoView.getDuration()) {
+                // If video has ended, restart from the beginning
+                videoView.seekTo(0);
+            }
             videoView.start();
         }
     });
 
-    // Reset video position on completion
-    videoView.setOnCompletionListener(mp -> videoView.seekTo(0));
+    // Handle video completion gracefully
+    videoView.setOnCompletionListener(mp -> {
+        Log.d("VideoPreview", "Video completed successfully.");
+
+        // Seek to the last frame and allow tapping to restart the video
+        videoView.seekTo(videoView.getDuration());
+    });
 
     closeButton.setOnClickListener(v -> {
         if (videoView.isPlaying()) {
@@ -847,6 +865,7 @@ private void showVideoPreviewDialog(Uri videoUri) {
 
     dialog.show();
 }
+
 
 private String createBitmapImage(String text, int index, File tempDir, boolean isShadowEnabled, int shadowColor, boolean isGlowEnabled, int glowColor, boolean isStrokeEnabled, int strokeColor, float strokeWidth) {
     int width = selectedResolutionWidth;
