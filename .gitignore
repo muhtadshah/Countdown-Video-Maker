@@ -14,6 +14,32 @@
 /bin/
 /gen/
 /out/
+
+# Gradle files
+.gradle/
+/build/
+
+# Un-ignore the app/build directory to allow adding APKs
+!app/build/
+!app/build/outputs/apk/debug/releases/*.apk
+
+# Local configuration file (sdk path, etc)
+local.properties# Built application files
+*.apk
+*.aar
+*.ap_
+*.aab
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+/bin/
+/gen/
+/out/
 #  Uncomment the following line in case you need and you don't have the release build type files in your app
 # Gradle files
 .gradle/

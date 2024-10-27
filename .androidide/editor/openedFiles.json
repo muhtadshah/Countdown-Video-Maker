@@ -44,7 +44,37 @@
           "line": 261
         }
       }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Countdown-Video-Maker/build.gradle",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Countdown-Video-Maker/app/build.gradle",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 183,
+          "line": 11
+        },
+        "start": {
+          "column": 0,
+          "index": 183,
+          "line": 11
+        }
+      }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Countdown-Video-Maker/app/src/main/AndroidManifest.xml"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Countdown-Video-Maker/app/build.gradle"
 }
