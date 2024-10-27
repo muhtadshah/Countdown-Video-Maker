@@ -32,7 +32,12 @@ That's when I got an idea to make this app. Not only can you generate a countdow
 # Preview
 
 https://github.com/user-attachments/assets/2b03d0ff-c92e-4949-a4e0-b8f605d68666
+
 *A 3 second timer*
+
+# Download
+
+Click [here](https://github.com/muhtadshah/Countdown-Video-Maker/releases/download/Releases/app-release-unsigned.apk) to download the app
 
 # Contributing
 Contributions are welcome! If you have suggestions for improvements or new features, please fork the repository and submit a pull request.
