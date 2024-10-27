@@ -5,6 +5,11 @@ plugins {
 android {
     namespace 'com.example.countdowntimerapp'
     compileSdk 33
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+
     
     defaultConfig {
         applicationId "com.example.countdowntimerapp"
