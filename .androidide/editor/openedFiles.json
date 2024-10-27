@@ -1,20 +1,50 @@
 {
   "allFiles": [
     {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Countdown-Video-Maker/app/src/main/res/values/strings.xml",
+      "selection": {
+        "end": {
+          "column": 12,
+          "index": 177,
+          "line": 4
+        },
+        "start": {
+          "column": 12,
+          "index": 177,
+          "line": 4
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Countdown-Video-Maker/app/src/main/AndroidManifest.xml",
+      "selection": {
+        "end": {
+          "column": 7,
+          "index": 594,
+          "line": 13
+        },
+        "start": {
+          "column": 7,
+          "index": 594,
+          "line": 13
+        }
+      }
+    },
+    {
       "file": "/storage/emulated/0/AndroidIDEProjects/Countdown-Video-Maker/app/src/main/java/com/example/countdowntimerapp/MainActivity.java",
       "selection": {
         "end": {
-          "column": 0,
-          "index": 34453,
-          "line": 867
+          "column": 17,
+          "index": 10514,
+          "line": 261
         },
         "start": {
-          "column": 0,
-          "index": 34453,
-          "line": 867
+          "column": 17,
+          "index": 10514,
+          "line": 261
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Countdown-Video-Maker/app/src/main/java/com/example/countdowntimerapp/MainActivity.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Countdown-Video-Maker/app/src/main/AndroidManifest.xml"
 }
