@@ -1,112 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
-     xmlns:android="http://schemas.android.com/apk/res/android"
-     android:layout_height="wrap_content"
-     android:layout_width="match_parent"
-     android:padding="16dp"
-     android:id="@+id/scroll_view">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:maxHeight="600dp"
+    android:background="?attr/colorSurface"
+    android:id="@+id/scroll_view">
 
     <LinearLayout
-         android:layout_height="wrap_content"
-         android:layout_width="match_parent"
-         android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="32dp"
+        android:orientation="vertical">
 
         <TextView
-             android:layout_height="wrap_content"
-             android:layout_width="wrap_content"
-             android:text="Select Font" />
-        
-
-        <Spinner
-             android:layout_height="wrap_content"
-             android:layout_width="match_parent"
-             android:id="@+id/font_spinner">
-        </Spinner>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textColor="?attr/colorOnSurface"
+            android:text="Text Properties" />
 
         <TextView
-             android:layout_height="wrap_content"
-             android:layout_width="wrap_content"
-             android:text="Font Size" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?attr/colorOnSurface"
+            android:text="Select Font" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <AutoCompleteTextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:inputType="none"
+    android:id="@+id/font_spinner"
+    android:padding="8dp"
+    android:backgroundTint="?attr/colorOnSurface"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?attr/colorOnSurface"
+            android:text="Font Size" />
 
         <SeekBar
-             android:layout_height="wrap_content"
-             android:layout_width="match_parent"
-             android:max="150"
-             android:id="@+id/font_size_seekbar" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="150"
+            android:progress="100"
+            android:id="@+id/font_size_seekbar"
+            android:layout_marginBottom="24dp" />
 
-        <ImageView
-    android:id="@+id/preview_image"
-    android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:contentDescription="@string/preview_image_desc"
-    android:background="#000000" />
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="24dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="12dp">
 
-        <Button
-             android:layout_height="wrap_content"
-             android:layout_width="wrap_content"
-             android:id="@+id/btn_color_picker"
-             android:text="Pick Text Color" />
-        <Button
-    android:id="@+id/btn_background_color_picker"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Background Color" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:contentDescription="Preview of text with current settings"
+                android:padding="16dp"
+                android:id="@+id/preview_image" />
 
+        </com.google.android.material.card.MaterialCardView>
 
-        <CheckBox
-        android:id="@+id/checkbox_shadow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Shadow" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal">
 
-        <Button
-        android:id="@+id/btn_shadow_color_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Shadow Color" />
-        
-        <CheckBox
-        android:id="@+id/checkbox_glow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Glow" />
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:id="@+id/btn_color_picker"
+                android:text="TEXT COLOR"
+                android:minWidth="80dp"
+                android:ellipsize="end"
+                android:maxLines="1" />
 
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:id="@+id/btn_background_color_picker"
+                android:text="BG COLOR"
+                android:minWidth="80dp"
+                android:ellipsize="end"
+                android:maxLines="1" />
 
-        <Button
-        android:id="@+id/btn_glow_color_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Glow Color" />
+        </LinearLayout>
 
-        
-        <CheckBox
-        android:id="@+id/checkbox_stroke"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stroke" />
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="12dp">
 
-        <Button
-        android:id="@+id/btn_stroke_color_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stroke Color" />
-        
-        <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Stroke Width" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:orientation="vertical">
 
-<SeekBar
-    android:id="@+id/stroke_width_seekbar"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:max="20" />
-        
-        <Button
-             android:layout_height="wrap_content"
-             android:layout_width="wrap_content"
-             android:id="@+id/confirm_button"
-             android:text="Confirm" />
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:layout_marginBottom="8dp"
+                    android:id="@+id/checkbox_shadow"
+                    android:text="Shadow Effect" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginBottom="16dp"
+                    android:id="@+id/btn_shadow_color_picker"
+                    android:text="Shadow Color" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:layout_marginBottom="8dp"
+                    android:id="@+id/checkbox_glow"
+                    android:text="Glow Effect" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginBottom="16dp"
+                    android:id="@+id/btn_glow_color_picker"
+                    android:text="Glow Color" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:layout_marginBottom="8dp"
+                    android:id="@+id/checkbox_stroke"
+                    android:text="Stroke Effect" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginBottom="8dp"
+                    android:id="@+id/btn_stroke_color_picker"
+                    android:text="Stroke Color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="32dp"
+                    android:text="Stroke Width" />
+
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="20"
+                    android:progress="5"
+                    android:id="@+id/stroke_width_seekbar"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="8dp" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:id="@+id/confirm_button"
+            android:text="Apply Changes" />
 
     </LinearLayout>
 

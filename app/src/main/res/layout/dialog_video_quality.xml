@@ -1,76 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
      xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
      android:layout_height="wrap_content"
      android:layout_width="match_parent"
+     android:background="?attr/colorSurface"
      android:padding="16dp"
-     android:orientation="vertical">
+     android:id="@+id/scroll_view">
 
-    <TextView
-         android:layout_height="wrap_content"
-         android:layout_width="wrap_content"
-         android:text="Select Resolution"
-         android:paddingTop="8dp" />
-
-    <Spinner
+    <LinearLayout
          android:layout_height="wrap_content"
          android:layout_width="match_parent"
-         android:id="@+id/spinner_resolution">
+         android:padding="32dp"
+         android:orientation="vertical">
 
-    </Spinner>
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="24dp"
+             android:gravity="center"
+             android:textAppearance="?attr/textAppearanceHeadline6"
+             android:textColor="?attr/colorOnSurface"
+             android:text="Video Quality" />
 
-    <TextView
-         android:layout_height="wrap_content"
-         android:layout_width="wrap_content"
-         android:text="Select FPS"
-         android:paddingTop="16dp" />
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="8dp"
+             android:textAppearance="?attr/textAppearanceBody2"
+             android:textColor="?attr/colorOnSurface"
+             android:text="Select Resolution" />
 
-    <Spinner
-         android:layout_height="wrap_content"
-         android:layout_width="match_parent"
-         android:id="@+id/spinner_fps">
+        <com.google.android.material.textfield.TextInputLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="16dp">
 
-    </Spinner>
+            <AutoCompleteTextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:clickable="true"
+                 android:padding="8dp"
+                 android:focusableInTouchMode="true"
+                 android:backgroundTint="?attr/colorOnSurface"
+                 android:focusable="true"
+                 android:inputType="none"
+                 android:id="@+id/spinner_resolution" />
 
-    <TextView
-         android:layout_height="wrap_content"
-         android:layout_width="match_parent"
-         android:visibility="gone"
-         android:textColor="#FF0000"
-         android:maxLines="3"
-         android:scrollHorizontally="false"
-         android:id="@+id/fps_warning"
-         android:text="Warning: Lower FPS values increase video length."
-         android:paddingTop="8dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-         android:layout_height="wrap_content"
-         android:layout_width="wrap_content"
-         android:text="Select Bitrate"
-         android:paddingTop="16dp" />
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="8dp"
+             android:textAppearance="?attr/textAppearanceBody2"
+             android:textColor="?attr/colorOnSurface"
+             android:layout_marginTop="8dp"
+             android:text="Select FPS" />
 
-    <Spinner
-         android:layout_height="wrap_content"
-         android:layout_width="match_parent"
-         android:id="@+id/spinner_bitrate">
+        <com.google.android.material.textfield.TextInputLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="16dp">
 
-    </Spinner>
+            <AutoCompleteTextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:clickable="true"
+                 android:padding="8dp"
+                 android:focusableInTouchMode="true"
+                 android:backgroundTint="?attr/colorOnSurface"
+                 android:focusable="true"
+                 android:inputType="none"
+                 android:id="@+id/spinner_fps" />
 
-    <EditText
-         android:layout_height="wrap_content"
-         android:layout_width="match_parent"
-         android:visibility="gone"
-         android:hint="Enter custom bitrate in Mbps"
-         android:layout_marginTop="8dp"
-         android:inputType="number"
-         android:id="@+id/custom_bitrate_input" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-         android:layout_height="wrap_content"
-         android:layout_width="wrap_content"
-         android:layout_marginTop="24dp"
-         android:id="@+id/confirm_button"
-         android:text="Confirm"
-         android:layout_gravity="center_horizontal" />
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:visibility="gone"
+             android:textColor="?attr/colorError"
+             android:maxLines="3"
+             android:scrollHorizontally="false"
+             android:id="@+id/fps_warning"
+             android:text="Warning: Lower FPS values increase video length."
+             android:paddingTop="8dp" />
 
-</LinearLayout>
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="8dp"
+             android:textAppearance="?attr/textAppearanceBody2"
+             android:textColor="?attr/colorOnSurface"
+             android:layout_marginTop="8dp"
+             android:text="Select Bitrate" />
+
+        <com.google.android.material.textfield.TextInputLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_marginBottom="16dp">
+
+            <AutoCompleteTextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:clickable="true"
+                 android:padding="8dp"
+                 android:focusableInTouchMode="true"
+                 android:backgroundTint="?attr/colorOnSurface"
+                 android:focusable="true"
+                 android:inputType="none"
+                 android:id="@+id/spinner_bitrate" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+       
+
+        <com.google.android.material.button.MaterialButton
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:padding="12dp"
+             android:id="@+id/confirm_button"
+             android:text="Confirm" />
+
+    </LinearLayout>
+
+</ScrollView>

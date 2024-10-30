@@ -2,7 +2,6 @@ package com.example.countdowntimerapp;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -27,10 +26,8 @@ import android.text.Editable;
 import java.util.ArrayList;
 import android.database.Cursor;
 import android.provider.OpenableColumns;
-import java.util.Arrays;
 import android.widget.ImageView;
 import android.widget.ScrollView;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
@@ -43,18 +40,24 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import android.widget.AutoCompleteTextView;
+import android.text.InputType;
+import android.graphics.drawable.ColorDrawable;
+import android.view.Window;
 
 import com.arthenica.ffmpegkit.FFmpegKit;
 import com.arthenica.ffmpegkit.ReturnCode;
 import com.skydoves.colorpickerview.ColorEnvelope;
 import com.skydoves.colorpickerview.ColorPickerDialog;
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -64,11 +67,13 @@ import android.view.KeyEvent;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import android.view.MotionEvent;
 import java.util.Date;
 import java.util.Locale;
 import android.text.SpannableStringBuilder;
 import android.graphics.MaskFilter;
 import android.graphics.BlurMaskFilter;
+import android.os.Build;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,100 +81,114 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_FONT_PICKER = 2;
 
     // UI Elements
-private EditText inputSeconds;
-private TextView statusText;
-private Button downloadButton, textPropertiesButton;
-private Button videoQualityButton;
-private Dialog progressDialog;
-private Dialog textPropertiesDialog;
-private Spinner fontSpinner;
-private ImageView previewImage; // Use ImageView instead of TextView
+    private EditText inputSeconds;
+    private TextView statusText;
+    private Button downloadButton, textPropertiesButton;
+    private Button videoQualityButton;
+    private Dialog progressDialog;
+    private Dialog textPropertiesDialog;
+    private AutoCompleteTextView fontSpinner;
+    private ImageView previewImage; 
+    private SwitchMaterial reverseCountdownSwitch;
+    
+    // Text Properties
+    private int textColor = Color.WHITE;
+    private int shadowColor = Color.BLACK;
+    private int glowColor = Color.YELLOW;
+    private int strokeColor = Color.WHITE;
+    private boolean isShadowEnabled = false;
+    private boolean isGlowEnabled = false;
+    private boolean isStrokeEnabled = false;
+    private float selectedFontSize = 100f;
+    private float strokeWidth = 5f;
+    
+    // Font Properties
+    private String selectedFontFamily = "sans-serif";
+    private Typeface selectedTypeface;
+    private Typeface customTypeface;
+    private String customFontName;
+    private List<String> fontOptions = new ArrayList<>(Arrays.asList(
+        "sans-serif", "serif", "monospace", "cursive", "casual", "Add Custom Font"));
 
-// Text Properties
-private int textColor = Color.WHITE;
-private int shadowColor = Color.BLACK;
-private int glowColor = Color.YELLOW;
-private int strokeColor = Color.WHITE;
-private boolean isShadowEnabled = false;
-private boolean isGlowEnabled = false;
-private boolean isStrokeEnabled = false;
-private float selectedFontSize = 100f;
-private float strokeWidth = 5f;
-
-// Font Properties
-private String selectedFontFamily = "sans-serif";
-private Typeface selectedTypeface; // Holds the current Typeface (custom or standard)
-private Typeface customTypeface;   // Holds the custom Typeface if one is loaded
-private String customFontName;
-private List<String> fontOptions = new ArrayList<>(Arrays.asList(
-    "sans-serif", "serif", "monospace", "cursive", "casual", "Add Custom Font"));
-
-// Video Properties
-private int selectedResolutionWidth = 1280;
-private int selectedResolutionHeight = 720;
-private int selectedFPS = 120;
-private int selectedBitrate = 1000 * 1000;
-private TextView estimatedSizeText;
-private int backgroundColor = Color.parseColor("#00FF00"); 
+    // Video Properties
+    private int selectedResolutionWidth = 1280;
+    private int selectedResolutionHeight = 720;
+    private int selectedFPS = 120;
+    private int selectedBitrate = 1000 * 1000;
+    private TextView estimatedSizeText;
+    private int backgroundColor = Color.parseColor("#00FF00"); 
     
     @Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
-    
-    inputSeconds = findViewById(R.id.input_seconds);
-    statusText = findViewById(R.id.status_text);
-    downloadButton = findViewById(R.id.btn_download);
-    textPropertiesButton = findViewById(R.id.btn_text_properties);
-    videoQualityButton = findViewById(R.id.btn_video_quality);
-    estimatedSizeText = findViewById(R.id.estimated_size_text); // Initialize the TextView
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.status_bar_color));
+    }
+        // Initialize UI elements
+        inputSeconds = findViewById(R.id.input_seconds);
+        statusText = findViewById(R.id.status_text);
+        downloadButton = findViewById(R.id.btn_download);
+        textPropertiesButton = findViewById(R.id.btn_text_properties);
+        videoQualityButton = findViewById(R.id.btn_video_quality);
+        estimatedSizeText = findViewById(R.id.estimated_size_text);
+        reverseCountdownSwitch = findViewById(R.id.reverse_countdown_switch);
 
-    videoQualityButton.setOnClickListener(v -> openVideoQualityDialog());
-    checkPermissions();
+        // Set up listeners
+        videoQualityButton.setOnClickListener(v -> openVideoQualityDialog());
+        textPropertiesButton.setOnClickListener(v -> openTextPropertiesDialog());
+        checkPermissions();
 
-    downloadButton.setOnClickListener(v -> {
-        String input = inputSeconds.getText().toString();
-        if (!input.isEmpty()) {
-            try {
-                int seconds = Integer.parseInt(input);
-                if (seconds < 0) {
-                    Toast.makeText(MainActivity.this, "Please enter a non-negative number", Toast.LENGTH_SHORT).show();
-                } else {
-                    generateCountdownVideo(seconds, isShadowEnabled, shadowColor, isGlowEnabled, glowColor, isStrokeEnabled, strokeColor, strokeWidth);
+        // Download button click listener
+        downloadButton.setOnClickListener(v -> {
+            String input = inputSeconds.getText().toString();
+            if (!input.isEmpty()) {
+                try {
+                    int seconds = Integer.parseInt(input);
+                    if (seconds < 0) {
+                        Toast.makeText(MainActivity.this, "Please enter a non-negative number", Toast.LENGTH_SHORT).show();
+                    } else {
+                        boolean isReverse = reverseCountdownSwitch.isChecked();
+                        generateCountdownVideo(seconds, isReverse, isShadowEnabled, shadowColor, isGlowEnabled, glowColor, isStrokeEnabled, strokeColor, strokeWidth);
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(MainActivity.this, "Please enter a valid number", Toast.LENGTH_SHORT).show();
                 }
-            } catch (NumberFormatException e) {
+            } else {
                 Toast.makeText(MainActivity.this, "Please enter a valid number", Toast.LENGTH_SHORT).show();
             }
-        } else {
-            Toast.makeText(MainActivity.this, "Please enter a valid number", Toast.LENGTH_SHORT).show();
-        }
-    });
+        });
 
-    textPropertiesButton.setOnClickListener(v -> openTextPropertiesDialog());
+        // TextWatcher for inputSeconds to update estimated size
+        inputSeconds.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-    // Set up TextWatcher for inputSeconds to update estimated size
-    inputSeconds.addTextChangedListener(new TextWatcher() {
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updateEstimatedSize();
+            }
 
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        // Initialize estimated size display
         updateEstimatedSize();
     }
 
-    @Override
-    public void afterTextChanged(Editable s) {}
-});
-    // Initialize estimated size display
-    updateEstimatedSize();
-}
-
-private void openTextPropertiesDialog() {
+    private void openTextPropertiesDialog() {
     textPropertiesDialog = new Dialog(this);
     textPropertiesDialog.setContentView(R.layout.dialog_text_properties);
 
-    // Initialize UI components
-    fontSpinner = textPropertiesDialog.findViewById(R.id.font_spinner);
+    Window window = textPropertiesDialog.getWindow();
+    if (window != null) {
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    AutoCompleteTextView fontSpinner = textPropertiesDialog.findViewById(R.id.font_spinner);
     SeekBar fontSizeSeekBar = textPropertiesDialog.findViewById(R.id.font_size_seekbar);
     previewImage = textPropertiesDialog.findViewById(R.id.preview_image);
     Button colorPickerButton = textPropertiesDialog.findViewById(R.id.btn_color_picker);
@@ -179,84 +198,93 @@ private void openTextPropertiesDialog() {
     Button backgroundColorPickerButton = textPropertiesDialog.findViewById(R.id.btn_background_color_picker);
     SeekBar strokeWidthSeekBar = textPropertiesDialog.findViewById(R.id.stroke_width_seekbar);
     Button confirmButton = textPropertiesDialog.findViewById(R.id.confirm_button);
-    CheckBox shadowCheckbox = textPropertiesDialog.findViewById(R.id.checkbox_shadow);
-    CheckBox glowCheckbox = textPropertiesDialog.findViewById(R.id.checkbox_glow);
-    CheckBox strokeCheckbox = textPropertiesDialog.findViewById(R.id.checkbox_stroke);
+    SwitchMaterial shadowSwitch = textPropertiesDialog.findViewById(R.id.checkbox_shadow);
+    SwitchMaterial glowSwitch = textPropertiesDialog.findViewById(R.id.checkbox_glow);
+    SwitchMaterial strokeSwitch = textPropertiesDialog.findViewById(R.id.checkbox_stroke);
 
-    // Initialize UI elements based on saved state
-    shadowCheckbox.setChecked(isShadowEnabled);
-    glowCheckbox.setChecked(isGlowEnabled);
-    strokeCheckbox.setChecked(isStrokeEnabled);
+    shadowSwitch.setChecked(isShadowEnabled);
+    glowSwitch.setChecked(isGlowEnabled);
+    strokeSwitch.setChecked(isStrokeEnabled);
 
     shadowColorPickerButton.setEnabled(isShadowEnabled);
     glowColorPickerButton.setEnabled(isGlowEnabled);
     strokeColorPickerButton.setEnabled(isStrokeEnabled);
     strokeWidthSeekBar.setEnabled(isStrokeEnabled);
 
-    // Populate the font spinner with font options
-    ArrayAdapter<String> fontAdapter = new ArrayAdapter<String>(this, R.layout.font_spinner_item, fontOptions) {
+    // Adapter setup for font options
+    ArrayAdapter<String> fontAdapter = new ArrayAdapter<>(this, R.layout.font_spinner_item, fontOptions) {
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent, false);
+        }
+
         @Override
         public View getDropDownView(int position, View convertView, ViewGroup parent) {
-            View view = convertView;
+            return getCustomView(position, convertView, parent, true);
+        }
 
-            // Inflate the view if it is null
+        private View getCustomView(int position, View convertView, ViewGroup parent, boolean isDropDown) {
+            View view = convertView;
             if (view == null) {
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 view = inflater.inflate(R.layout.font_spinner_item, parent, false);
             }
 
             TextView textView = view.findViewById(R.id.font_spinner_item_text);
-            textView.setText(getItem(position));
+            String fontName = getItem(position);
+            textView.setText(fontName);
 
-            // Apply unique styling for "Add Custom Font" option
-            if (position == fontOptions.size() - 1) {  // Last item, "Add Custom Font"
-                textView.setTextColor(Color.BLUE);
+            if (position == fontOptions.size() - 1) {
+                textView.setTextColor(getContext().getResources().getColor(R.color.purple_500));
                 textView.setTypeface(null, Typeface.BOLD);
             } else {
-                textView.setTextColor(Color.BLACK);
-                textView.setTypeface(null, Typeface.NORMAL);
-            }
+                if (!isDropDown) {
+                    textView.setTextColor(getContext().getResources().getColor(R.color.white));
+                } else {
+                    textView.setTextColor(getContext().getResources().getColor(R.color.black));
+                }
 
+                if (fontName.equals(customFontName) && customTypeface != null) {
+                    textView.setTypeface(customTypeface);
+                } else {
+                    textView.setTypeface(Typeface.create(fontName, Typeface.NORMAL));
+                }
+            }
             return view;
         }
     };
-    fontAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
     fontSpinner.setAdapter(fontAdapter);
 
-    // Set default font selection
+    // Set default text to display the current font
     String currentFont = customFontName != null ? customFontName : selectedFontFamily;
-    int fontIndex = fontOptions.indexOf(currentFont);
-    if (fontIndex >= 0) {
-        fontSpinner.setSelection(fontIndex);
-    } else {
-        fontSpinner.setSelection(0);
-    }
+    fontSpinner.setText(currentFont, false);
 
-    // Set on item selected listener for font selection
-    fontSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            String selectedFont = fontOptions.get(position);
-            if (selectedFont.equals("Add Custom Font")) {
-                // Open file picker to select custom font
-                openFilePicker();
-            } else {
-                // Apply selected font to preview
-                selectedFontFamily = selectedFont;
-                if (selectedFont.equals(customFontName) && customTypeface != null) {
-                    selectedTypeface = customTypeface;
-                } else {
-                    selectedTypeface = Typeface.create(selectedFontFamily, Typeface.NORMAL);
-                }
-                updatePreviewText();
-            }
+    // Show dropdown on first click
+    fontSpinner.setOnClickListener(v -> fontSpinner.showDropDown());
+
+    // Open dropdown on focus (resolves double-click issue)
+    fontSpinner.setOnFocusChangeListener((v, hasFocus) -> {
+        if (hasFocus) {
+            fontSpinner.showDropDown();
         }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {}
     });
 
-    // Set initial font size and apply it to preview
+    fontSpinner.setOnItemClickListener((parent, view, position, id) -> {
+        String selectedFont = fontOptions.get(position);
+        if (selectedFont.equals("Add Custom Font")) {
+            openFilePicker();
+        } else {
+            selectedFontFamily = selectedFont;
+            if (selectedFont.equals(customFontName) && customTypeface != null) {
+                selectedTypeface = customTypeface;
+            } else {
+                selectedTypeface = Typeface.create(selectedFontFamily, Typeface.NORMAL);
+            }
+            updatePreviewText();
+        }
+    });
+
     fontSizeSeekBar.setProgress((int) selectedFontSize);
     fontSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
         @Override
@@ -269,11 +297,9 @@ private void openTextPropertiesDialog() {
         @Override public void onStopTrackingTouch(SeekBar seekBar) {}
     });
 
-    // Initialize the preview
     updatePreviewText();
 
-    // Shadow effect checkbox and color picker
-    shadowCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+    shadowSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
         isShadowEnabled = isChecked;
         shadowColorPickerButton.setEnabled(isChecked);
         updatePreviewText();
@@ -291,8 +317,7 @@ private void openTextPropertiesDialog() {
         .show()
     );
 
-    // Glow effect checkbox and color picker
-    glowCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+    glowSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
         isGlowEnabled = isChecked;
         glowColorPickerButton.setEnabled(isChecked);
         updatePreviewText();
@@ -310,8 +335,7 @@ private void openTextPropertiesDialog() {
         .show()
     );
 
-    // Stroke effect checkbox, color picker, and width
-    strokeCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+    strokeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
         isStrokeEnabled = isChecked;
         strokeColorPickerButton.setEnabled(isChecked);
         strokeWidthSeekBar.setEnabled(isChecked);
@@ -342,7 +366,6 @@ private void openTextPropertiesDialog() {
         @Override public void onStopTrackingTouch(SeekBar seekBar) {}
     });
 
-    // Text color picker
     colorPickerButton.setOnClickListener(v -> new ColorPickerDialog.Builder(this)
         .setTitle("Pick Text Color")
         .setPositiveButton("Confirm", (ColorEnvelopeListener) (envelope, fromUser) -> {
@@ -355,7 +378,6 @@ private void openTextPropertiesDialog() {
         .show()
     );
 
-    // Background color picker
     backgroundColorPickerButton.setOnClickListener(v -> new ColorPickerDialog.Builder(this)
         .setTitle("Pick Background Color")
         .setPositiveButton("Confirm", (ColorEnvelopeListener) (envelope, fromUser) -> {
@@ -369,15 +391,118 @@ private void openTextPropertiesDialog() {
         .show()
     );
 
-    // Confirm button
     confirmButton.setOnClickListener(v -> {
         textPropertiesDialog.dismiss();
     });
 
-    // Show the dialog
     textPropertiesDialog.show();
-}
 
+        // Shadow effect switch and color picker
+        glowSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        isGlowEnabled = isChecked;
+        glowColorPickerButton.setEnabled(isChecked);
+        updatePreviewText();
+    });
+
+        shadowColorPickerButton.setOnClickListener(v -> new ColorPickerDialog.Builder(this)
+            .setTitle("Pick Shadow Color")
+            .setPositiveButton("Confirm", (ColorEnvelopeListener) (envelope, fromUser) -> {
+                shadowColor = envelope.getColor();
+                updatePreviewText();
+            })
+            .attachAlphaSlideBar(true)
+            .attachBrightnessSlideBar(true)
+            .create()
+            .show()
+        );
+
+        // Glow effect switch and color picker
+        glowSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isGlowEnabled = isChecked;
+            glowColorPickerButton.setEnabled(isChecked);
+            updatePreviewText();
+        });
+
+        glowColorPickerButton.setOnClickListener(v -> new ColorPickerDialog.Builder(this)
+            .setTitle("Pick Glow Color")
+            .setPositiveButton("Confirm", (ColorEnvelopeListener) (envelope, fromUser) -> {
+                glowColor = envelope.getColor();
+                updatePreviewText();
+            })
+            .attachAlphaSlideBar(true)
+            .attachBrightnessSlideBar(true)
+            .create()
+            .show()
+        );
+
+        // Stroke effect switch, color picker, and width
+        strokeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        isStrokeEnabled = isChecked;
+        strokeColorPickerButton.setEnabled(isChecked);
+        strokeWidthSeekBar.setEnabled(isChecked);
+        updatePreviewText();
+    });
+
+        strokeColorPickerButton.setOnClickListener(v -> new ColorPickerDialog.Builder(this)
+            .setTitle("Pick Stroke Color")
+            .setPositiveButton("Confirm", (ColorEnvelopeListener) (envelope, fromUser) -> {
+                strokeColor = envelope.getColor();
+                updatePreviewText();
+            })
+            .attachAlphaSlideBar(true)
+            .attachBrightnessSlideBar(true)
+            .create()
+            .show()
+        );
+
+        strokeWidthSeekBar.setProgress((int) strokeWidth);
+        strokeWidthSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                strokeWidth = progress;
+                updatePreviewText();
+            }
+
+            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        // Text color picker
+        colorPickerButton.setOnClickListener(v -> new ColorPickerDialog.Builder(this)
+            .setTitle("Pick Text Color")
+            .setPositiveButton("Confirm", (ColorEnvelopeListener) (envelope, fromUser) -> {
+                textColor = envelope.getColor();
+                updatePreviewText();
+            })
+            .attachAlphaSlideBar(true)
+            .attachBrightnessSlideBar(true)
+            .create()
+            .show()
+        );
+
+        // Background color picker
+        backgroundColorPickerButton.setOnClickListener(v -> new ColorPickerDialog.Builder(this)
+            
+            .setTitle("Pick Background Color")
+            .setPositiveButton("Confirm", (ColorEnvelopeListener) (envelope, fromUser) -> {
+                backgroundColor = envelope.getColor();
+                updatePreviewText();
+            })
+            .attachAlphaSlideBar(true)
+            .attachBrightnessSlideBar(true)
+            .setPreferenceName("BackgroundColorPicker")
+            .create()
+            .show()
+        );
+
+        // Confirm button
+        confirmButton.setOnClickListener(v -> {
+            textPropertiesDialog.dismiss();
+        });
+
+        // Show the dialog
+        textPropertiesDialog.show();
+    }
     
     private void updatePreviewText() {
     if (previewImage == null) return;
@@ -413,7 +538,7 @@ private void openTextPropertiesDialog() {
         Paint glowPaint = new Paint(paint);
         glowPaint.setColor(glowColor);
         glowPaint.setMaskFilter(new BlurMaskFilter(15, BlurMaskFilter.Blur.NORMAL));
-        canvas.drawText("Preview Text", xPos, yPos, glowPaint);
+        canvas.drawText("00.00", xPos, yPos, glowPaint);
     }
 
     // Draw Shadow effect
@@ -421,7 +546,7 @@ private void openTextPropertiesDialog() {
         Paint shadowPaint = new Paint(paint);
         shadowPaint.setColor(shadowColor);
         shadowPaint.setShadowLayer(10, 5, 5, shadowColor);
-        canvas.drawText("Preview Text", xPos, yPos, shadowPaint);
+        canvas.drawText("00.00", xPos, yPos, shadowPaint);
     }
 
     // Draw Stroke effect
@@ -430,11 +555,11 @@ private void openTextPropertiesDialog() {
         strokePaint.setStyle(Paint.Style.STROKE);
         strokePaint.setStrokeWidth(strokeWidth);
         strokePaint.setColor(strokeColor);
-        canvas.drawText("Preview Text", xPos, yPos, strokePaint);
+        canvas.drawText("00.00", xPos, yPos, strokePaint);
     }
 
     // Draw main text
-    canvas.drawText("Preview Text", xPos, yPos, paint);
+    canvas.drawText("00.00", xPos, yPos, paint);
 
     // Set the bitmap to the ImageView
     previewImage.setImageBitmap(bitmap);
@@ -485,7 +610,7 @@ private String getFileName(Uri uri) {
     }
     return result;
 }
-    // Update Spinner to display custom font name and set preview text
+    // Update Spinner to display custom font name and set 00.00
     private void updateFontSpinnerWithCustomFont(String customFontName) {
     if (textPropertiesDialog != null && fontSpinner != null && customTypeface != null) {
         // Remove any existing custom fonts before adding new one
@@ -542,124 +667,105 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
     dialog.setContentView(R.layout.dialog_video_quality);
 
     // Find UI components in dialog
-    Spinner resolutionSpinner = dialog.findViewById(R.id.spinner_resolution);
-    Spinner fpsSpinner = dialog.findViewById(R.id.spinner_fps);
-    Spinner bitrateSpinner = dialog.findViewById(R.id.spinner_bitrate);
-    EditText customBitrateInput = dialog.findViewById(R.id.custom_bitrate_input);
+    AutoCompleteTextView resolutionDropdown = dialog.findViewById(R.id.spinner_resolution);
+    AutoCompleteTextView fpsDropdown = dialog.findViewById(R.id.spinner_fps);
+    AutoCompleteTextView bitrateDropdown = dialog.findViewById(R.id.spinner_bitrate);
     TextView fpsWarning = dialog.findViewById(R.id.fps_warning);
     Button confirmButton = dialog.findViewById(R.id.confirm_button);
 
     // Resolution options
     String[] resolutions = {"640x480", "1280x720", "1920x1080", "3840x2160"};
-    ArrayAdapter<String> resolutionAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, resolutions);
+    ArrayAdapter<String> resolutionAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, resolutions);
     resolutionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    resolutionSpinner.setAdapter(resolutionAdapter);
+    resolutionDropdown.setAdapter(resolutionAdapter);
 
     // FPS options
     Integer[] fpsOptions = {24, 30, 60, 120, 240};
-    ArrayAdapter<Integer> fpsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, fpsOptions);
+    ArrayAdapter<Integer> fpsAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, fpsOptions);
     fpsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    fpsSpinner.setAdapter(fpsAdapter);
+    fpsDropdown.setAdapter(fpsAdapter);
 
     // Bitrate options
-    String[] bitrateOptions = {"1 Mbps", "2 Mbps", "5 Mbps", "10 Mbps", "20 Mbps", "Custom"};
-    ArrayAdapter<String> bitrateAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, bitrateOptions);
+    String[] bitrateOptions = {"1 Mbps", "2 Mbps", "5 Mbps", "10 Mbps", "20 Mbps"};
+    ArrayAdapter<String> bitrateAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, bitrateOptions);
     bitrateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    bitrateSpinner.setAdapter(bitrateAdapter);
-
-    // Show/hide custom bitrate input
-    bitrateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            String selectedBitrateOption = bitrateOptions[position];
-            if (selectedBitrateOption.equals("Custom")) {
-                customBitrateInput.setVisibility(View.VISIBLE);
-            } else {
-                customBitrateInput.setVisibility(View.GONE);
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {}
-    });
+    bitrateDropdown.setAdapter(bitrateAdapter);
 
     // Set initial selections based on current settings
-    // Resolution
     String currentResolution = selectedResolutionWidth + "x" + selectedResolutionHeight;
     int resolutionIndex = Arrays.asList(resolutions).indexOf(currentResolution);
     if (resolutionIndex != -1) {
-        resolutionSpinner.setSelection(resolutionIndex);
+        resolutionDropdown.setText(resolutions[resolutionIndex], false);
     }
 
-    // FPS
     int fpsIndex = Arrays.asList(fpsOptions).indexOf(selectedFPS);
     if (fpsIndex != -1) {
-        fpsSpinner.setSelection(fpsIndex);
+        fpsDropdown.setText(String.valueOf(fpsOptions[fpsIndex]), false);
     }
 
-    // Bitrate
-    String currentBitrateOption = (selectedBitrate / 1000000) + " Mbps";
+    // Set initial selection for bitrate
+    String currentBitrateOption = (selectedBitrate / 1000000) + " Mbps"; // Convert to Mbps
     int bitrateIndex = Arrays.asList(bitrateOptions).indexOf(currentBitrateOption);
     if (bitrateIndex != -1) {
-        bitrateSpinner.setSelection(bitrateIndex);
+        bitrateDropdown.setText(bitrateOptions[bitrateIndex], false);
     } else {
-        bitrateSpinner.setSelection(bitrateOptions.length - 1); // Select "Custom"
-        customBitrateInput.setVisibility(View.VISIBLE);
-        customBitrateInput.setText(String.valueOf(selectedBitrate / 1000000));
+        bitrateDropdown.setText("Custom", false); // Handle custom bitrate case
     }
 
-    // Set onItemSelectedListener for FPS Spinner to show warning for 24 FPS
-    fpsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            int selectedFPSValue = fpsOptions[position];
-            if (selectedFPSValue == 24) {
-                fpsWarning.setVisibility(View.VISIBLE);
-            } else {
-                fpsWarning.setVisibility(View.GONE);
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {}
+    // Set onItemSelectedListener for FPS Dropdown to show warning for 24 FPS
+    fpsDropdown.setOnItemClickListener((parent, view, position, id) -> {
+        int selectedFPSValue = fpsOptions[position];
+        fpsWarning.setVisibility(selectedFPSValue == 24 ? View.VISIBLE : View.GONE);
     });
+
+    // Set OnTouchListener for dropdowns to ensure they open on first click
+    View.OnTouchListener openSpinnerListener = (v, event) -> {
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            ((AutoCompleteTextView) v).showDropDown();
+        }
+        return false;
+    };
+    
+    resolutionDropdown.setOnTouchListener(openSpinnerListener);
+    fpsDropdown.setOnTouchListener(openSpinnerListener);
+    bitrateDropdown.setOnTouchListener(openSpinnerListener);
 
     // Confirm button action to save selections
     confirmButton.setOnClickListener(v -> {
         // Get selected resolution
-        String resolution = (String) resolutionSpinner.getSelectedItem();
+        String resolution = resolutionDropdown.getText().toString();
         String[] resParts = resolution.split("x");
         selectedResolutionWidth = Integer.parseInt(resParts[0]);
         selectedResolutionHeight = Integer.parseInt(resParts[1]);
 
         // Get selected FPS
-        selectedFPS = (Integer) fpsSpinner.getSelectedItem();
+        selectedFPS = Integer.parseInt(fpsDropdown.getText().toString());
 
         // Get selected bitrate
-        String bitrateSelection = (String) bitrateSpinner.getSelectedItem();
+        String bitrateSelection = bitrateDropdown.getText().toString();
         if (bitrateSelection.equals("Custom")) {
-            String customBitrateStr = customBitrateInput.getText().toString();
-            if (!customBitrateStr.isEmpty()) {
-                selectedBitrate = Integer.parseInt(customBitrateStr) * 1000 * 1000;
-            } else {
-                selectedBitrate = 1000 * 1000; // Default to 1 Mbps if input is empty
-            }
+            // Implement logic for custom bitrate input if required
+            selectedBitrate = 1000 * 1000; // Default to 1 Mbps if custom is selected
         } else {
-            selectedBitrate = Integer.parseInt(bitrateSelection.split(" ")[0]) * 1000 * 1000;
+            selectedBitrate = Integer.parseInt(bitrateSelection.split(" ")[0]) * 1000 * 1000; // Convert to bits
         }
 
         // Update estimated size
         updateEstimatedSize();
 
-        dialog.dismiss();
+        dialog.dismiss(); // Dismiss dialog after saving settings
     });
 
     // Show dialog
     dialog.show();
 }
+
+
+
+
     
 
-private void generateCountdownVideo(int seconds, boolean isShadowEnabled, int shadowColor, boolean isGlowEnabled, int glowColor, boolean isStrokeEnabled, int strokeColor, float strokeWidth) {
+private void generateCountdownVideo(int seconds, boolean isReverse, boolean isShadowEnabled, int shadowColor, boolean isGlowEnabled, int glowColor, boolean isStrokeEnabled, int strokeColor, float strokeWidth) {
     runOnUiThread(() -> {
         // Create a custom dialog with a custom theme
         Dialog customDialog = new Dialog(MainActivity.this, R.style.CustomDialogTheme);
@@ -670,13 +776,7 @@ private void generateCountdownVideo(int seconds, boolean isShadowEnabled, int sh
 
         // Prevent the user from dismissing the dialog with the back button
         customDialog.setCancelable(false);
-        customDialog.setOnKeyListener((dialog, keyCode, event) -> {
-            if (keyCode == KeyEvent.KEYCODE_BACK) {
-                // Ignore back button presses
-                return true;
-            }
-            return false;
-        });
+        customDialog.setOnKeyListener((dialog, keyCode, event) -> keyCode == KeyEvent.KEYCODE_BACK);
 
         // Find the UI components in the custom dialog layout
         TextView title = customDialog.findViewById(R.id.title);
@@ -709,11 +809,14 @@ private void generateCountdownVideo(int seconds, boolean isShadowEnabled, int sh
         int frameCount = seconds * selectedFPS;
 
         for (int i = 0; i <= frameCount; i++) {
-            // Calculate current time for counting up from 0
-            double currentTime = (double) i / selectedFPS;
-
-            if (currentTime > seconds) {
-                currentTime = seconds; // Ensures the timer stops at the specified input value
+            // Calculate current time based on countdown direction
+            double currentTime;
+            if (isReverse) {
+                currentTime = seconds - ((double) i / selectedFPS);
+                if (currentTime < 0) currentTime = 0;  // Ensures the timer stops at 0
+            } else {
+                currentTime = (double) i / selectedFPS;
+                if (currentTime > seconds) currentTime = seconds;  // Ensures the timer stops at specified time
             }
 
             // Format the current countdown time to display as "seconds.milliseconds"
@@ -783,7 +886,6 @@ private void generateCountdownVideo(int seconds, boolean isShadowEnabled, int sh
 
 
 
-
 private void saveVideoToMediaStore(File videoFile) {
     ContentValues values = new ContentValues();
     values.put(MediaStore.Video.Media.DISPLAY_NAME, "Countdown_" + System.currentTimeMillis() + ".mp4");
@@ -814,6 +916,11 @@ private void showVideoPreviewDialog(Uri videoUri) {
     Dialog dialog = new Dialog(MainActivity.this);
     dialog.setContentView(R.layout.dialog_video_preview);
     dialog.setCancelable(true);
+
+    if (dialog.getWindow() != null) {
+    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+}
+
 
     VideoView videoView = dialog.findViewById(R.id.video_view);
     Button closeButton = dialog.findViewById(R.id.btn_close);

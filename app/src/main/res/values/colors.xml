@@ -7,4 +7,9 @@
     <color name="black">#000000</color> 
     <color name="gray">#808080</color> 
     <color name="dialogBackgroundColor">#303030</color> 
+    <color name="button_background">#FF6200EE</color> 
+    <color name="white">#FFFFFF</color> 
+    <color name="purple_500">#BB86FC</color>
+    <color name="status_bar_color">#1E1E78</color>
+    <color name="backgroundDark">#121212</color> 
 </resources>
